@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tense Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 20px;
+    }
+    .game-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .options button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .options button:hover {
+      background-color: #0056b3;
+    }
+    .feedback {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Tense Game</h1>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="score" id="score"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        sentence: "He ___ to school every day.",
+        correct: "goes",
+        options: ["went", "goes", "will go", "going"]
+      },
+      {
+        sentence: "They ___ a movie last night.",
+        correct: "watched",
+        options: ["watch", "watched", "watches", "watching"]
+      },
+      {
+        sentence: "I ___ my homework tomorrow.",
+        correct: "will do",
+        options: ["did", "will do", "do", "doing"]
+      },
+      {
+        sentence: "She ___ a cake now.",
+        correct: "is baking",
+        options: ["bakes", "baked", "is baking", "will bake"]
+      },
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = questions[current];
+      document.getElementById("question").innerHTML = q.sentence.replace("___", "_____");
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("score").textContent = `Score: ${score}/${questions.length}`;
+    }
+
+    function checkAnswer(answer) {
+      const q = questions[current];
+      if (answer === q.correct) {
+        document.getElementById("feedback").textContent = "✅ Correct!";
+        score++;
+      } else {
+        document.getElementById("feedback").textContent = `❌ Incorrect! Correct answer: ${q.correct}`;
+      }
+      current++;
+      setTimeout(() => {
+        if (current < questions.length) {
+          loadQuestion();
+        } else {
+          document.getElementById("question").textContent = "Game Over!";
+          document.getElementById("options").innerHTML = "";
+          document.getElementById("feedback").textContent = "";
+          document.getElementById("score").textContent = `Final Score: ${score}/${questions.length}`;
+        }
+      }, 1500);
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
